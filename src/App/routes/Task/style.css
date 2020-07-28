@@ -1,0 +1,6 @@
+.task {
+    flex: 1;
+    background-color: aquamarine;
+    width: 200px;
+    height: 400px;
+}
