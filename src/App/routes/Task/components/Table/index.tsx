@@ -12,14 +12,16 @@ import TableCell from '@material-ui/core/TableCell';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
-import React, { useCallback, useMemo, useState } from 'react';
+import React, { useCallback, useMemo, useState, useContext } from 'react';
 import './style.css';
+import { LanContext } from '../../../../LanContext';
+import {langIndexRoutes} from '../../../../../const/dict';
 
 const useStyles = makeStyles({
   table: {
     minWidth: 650,
   },
-})
+});
 
 export default function Table({
   data,
@@ -36,12 +38,14 @@ export default function Table({
     () =>
       data.map(([id, name], index) => (
         <TableRow key={`${index}_${name}`}>
-            <TableCell align="right" onClick={() => handleClick('random')}>{id}</TableCell>
-            <TableCell onClick={() => handleClick('text')} align="right">{name}</TableCell>
+          <TableCell align="right" onClick={() => handleClick('random')}>{id}</TableCell>
+          <TableCell onClick={() => handleClick('text')} align="right">{name}</TableCell>
         </TableRow>
       )),
     [data, handleClick]
   );
+
+  const { data: dataLan } = useContext(LanContext);
   return (
     <>
       <AppBar position="static">
@@ -56,7 +60,7 @@ export default function Table({
             }}
           />
           <Button color="inherit" onClick={handleFilter}>
-            Search
+            {dataLan[langIndexRoutes['task.table.search.button']]}
           </Button>
         </Toolbar>
       </AppBar>
@@ -64,8 +68,8 @@ export default function Table({
         <TableMaterial className={classes.table} aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell align="right">Random</TableCell>
-              <TableCell align="right">Text</TableCell>
+              <TableCell align="right">{dataLan[langIndexRoutes['task.table.search.column-1']]}</TableCell>
+              <TableCell align="right">{dataLan[langIndexRoutes['task.table.search.column-2']]}</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>{DataParsed}</TableBody>
