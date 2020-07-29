@@ -4,3 +4,9 @@ export enum routes {
   user = '/user',
   roles = '/roles',
 }
+
+export const taskRoutes = {
+  table: `${routes.task}/table`,
+  create: `${routes.task}/create`,
+  update: `${routes.task}/update`
+};

@@ -1,5 +1,7 @@
-import { Drawer } from '@material-ui/core';
+import { Button, Drawer } from '@material-ui/core';
 import React, { useCallback, useState } from 'react';
+import { Route, Switch, useHistory } from 'react-router';
+import { routes, taskRoutes } from '../../../const/routes';
 import EditEntry from './components/EditEntry';
 import Table from './components/Table';
 import './style.css';
@@ -23,14 +25,38 @@ export default function Task() {
     setDrawerOpen(true);
   }, []);
 
+  const history = useHistory();
+
+  
+
   return (
     <TaskContext.Provider
       value={{
-        applyFilters: () => {},
+        applyFilters: () => null,
       }}
     >
       <div className="task">
-        <Table data={tableData} handleClick={handleTableClick} />
+        <Button onClick={() => history.push(taskRoutes.table)}>Table</Button>
+        <Button onClick={() => history.push(taskRoutes.create)}>Create</Button>
+        <Button onClick={() => history.push(taskRoutes.update)}>Update</Button>
+        <Switch>
+          <Route path={taskRoutes.table}>
+            <Table data={tableData} handleClick={handleTableClick} />
+          </Route>
+          <Route path={taskRoutes.create}>
+            <div className="demo-1">
+
+            </div>
+          </Route>
+          <Route path={taskRoutes.update}>
+            <div className="demo-2">
+
+            </div>
+          </Route>
+          <Route path={routes.task}>
+            <></>
+          </Route>
+        </Switch>
         <Drawer
           onClose={() => setDrawerOpen(false)}
           anchor="right"
