@@ -6,7 +6,7 @@ import './App.css';
 import Header from './components/Header';
 import Landing from './routes/Landing';
 import Task from './routes/Task';
-import { LanContext } from './LanContext';
+import { LanContext, providedHandlers } from './LanContext';
 import { langEnum, lang as langDict } from '../const/dict';
 import { storageKey } from '../api/storage';
 import TaskContext from './routes/Task/TaskContext';
@@ -33,12 +33,58 @@ function App() {
 
   console.log('Testing', test);
   test += 1;
+  const [handlerList, setHandlerList] = useState<Array<[providedHandlers, Function]>>([]);
+
+  const registerHandler = useCallback((handlerName, handler) => {
+    setHandlerList(oldList => ([
+      ...oldList,
+      [handlerName, handler]
+    ]))
+  }, []);
+
+  const removeHandler = useCallback((handlerName) => {
+    setHandlerList(oldList => {
+      return oldList.filter(([handlerOldName]) => handlerOldName !== handlerName);
+    });
+  }, []);
+
+  const [eventListeners, setEventListeners] = useState<Array<[string, Function]>>([]);
+  const removeListener = useCallback((listenerName) => {
+    setEventListeners(oldList => {
+      return oldList.filter(([listenerOldName]) => listenerOldName !== listenerName);
+    });
+  }, []);
+
+  const registerListener = useCallback((listenerName, listener) => {
+    setEventListeners(oldList => ([
+      ...oldList,
+      [listenerName, listener]
+    ]))
+  }, []);
+  console.log(eventListeners)
+
+  const callListener = useCallback((listenerName, payload) => {
+    console.log(eventListeners)
+    for(let i = 0; i < eventListeners.length; i+=1) {
+      const [listenerName2, listener] = eventListeners[i];
+      if(listenerName2 === listenerName) {
+        listener(payload);
+      }
+    }
+  }, [eventListeners]);
+
   return (
     <LanContext.Provider
       value={{
         onLanguageChange: handleLanChange,
         data: langDict[lang],
         initLang,
+        handlerList,
+        registerHandler,
+        registerListener,
+        removeListener,
+        callListener,
+        removeHandler,
       }}
     >
       <div className="App">

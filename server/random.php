@@ -3,6 +3,8 @@
 require_once 'config.php';
 require_once 'Functions.php';
 
+header("Access-Control-Allow-Origin:*");
+
 try {
   if ((isset($_REQUEST['column_count']) != '') && (isset($_REQUEST['row_count']) != '')) {
     $db = new Functions();
